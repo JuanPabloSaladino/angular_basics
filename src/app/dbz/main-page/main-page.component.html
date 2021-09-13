@@ -1,0 +1,22 @@
+<div class="container">
+
+    <h1 class="text-center">DBZ</h1>
+    <hr class="mb-5">
+
+    <div class="row">
+        <div class="col">
+            <app-characters></app-characters>
+        </div>
+
+        <div class="col">
+            <app-add 
+                [newCharacter]      = "newCharacter"
+            >                
+            </app-add>
+        </div>
+    </div>
+
+</div>
+
+                        <!-- [value]     = "newCharacter.name"
+                        (input)     = changeName($event)     -->

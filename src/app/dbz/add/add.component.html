@@ -1,0 +1,26 @@
+<h3>Add: <small class="text-muted"> {{ newCharacter.name }}</small></h3>
+<hr>
+
+<form (ngSubmit)="addCharacter( )">
+    <div class="mb-3">
+        <input 
+            type        = "text"
+            class       = "form-control"
+            name        = "name"
+            placeholder = "Name"
+            [(ngModel)] = "newCharacter.name"
+        >
+    </div>
+    <div class="mb-3">
+        <input
+            type        ="number"
+            class       ="form-control"
+            name        = "power"
+            placeholder = "Power"
+            [(ngModel)] = "newCharacter.power"
+            >
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-dark" type="submit">Add</button>
+    </div>
+</form>
