@@ -1,27 +1,130 @@
-# AngularBasics
+## One way data binding
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.4.
+* Enviar un valor desde un componente y que se refleje en el código HTML:
 
-## Development server
+```javascript
+newCharacter : Character = {
+	name    : '',
+	power   : 0
+}
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```html
+<h3> {{ newCharacter.name }} </h3>
+```
+---
 
-## Code scaffolding
+* Emitir un evento desde el código HTML y que eso repercuta en el componente:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```html
+<input 
+			type = "text"
+			(input) = changeName($event)
+>
+```
 
-## Build
+```javascript
+changeName( event : any ) {
+	console.log( event.target.value );
+}
+```
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Two way data binding
 
-## Running unit tests
+* Haciendo uso de **ngModel** se puede enviar el dato que se encuentra en el input hacia el componente, y además, lo que esté seteado en la propiedad del componente, se verá reflejado en el código HTML. Recordar que cuando se hace uso de esta directiva se debe incluir en el input el atributo **name**
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```javascript
+newCharacter : Character = {
+	name    : '',
+	power   : 0
+}
+```
 
-## Running end-to-end tests
+```html
+<input 
+			type = "text"
+			name = "name"
+			[(ngModel)] = "newCharacter.name"
+>
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Se pone:
 
-## Further help
+```html
+	[(ngModel)] = "newCharacter.name"
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Porque estoy indicando que quiero tanto escuchar como emitir un evento. Y el valor de ese evento me interesa que caiga en la propiedad newCharacter.name.
+
+## Pipes
+Se utilizan para transformar visualmente la información
+
+```html
+    <p> {{ character.power | number }} </p>
+```
+
+## Comandos
+
+* Crear un nuevo componente
+ng generate component path/donde/crear/el/componente/nombre_componente 
+ng g c component path/donde/crear/el/componente/nombre_componente 
+
+Si no quiero que se cree el archivo de prueba, bastaría con agregar el comando --skipTests
+path/donde/crear/el/componente/nombre_componente --skipTests
+
+## @Input
+Se utiliza para pasar información desde el componente padre hacia el componente hijo.
+
+[characters] = "characters"
+
+* "characters" es el arreglo que se encuentra en el componente padre
+* [characters] es una propiedad del componente hijo que quiero asociarle ese arreglo. 
+
+## @Onput
+Se utiliza para pasar información desde el componente hijo hacia el componente padre. Emite un valor al padre. Es como un evento click, por ejemplo.
+
+```html
+@Output()
+onNewCharacter  : EventEmitter<Character> = new EventEmitter();
+```
+
+Le indicamos que el evento va a emitir objetos de tipo Character.
+
+```html
+	(onNewCharacter)    = "addNewCharacter( $event )" 
+```
+
+addNewCharacter() será el evento que se va a disparar o emitir en el componente padre.
+Por lo tanto, en el componente padre, se define ese método.
+
+addNewCharacter( character : Character ) {
+this.characters.push(character);
+}
+
+
+## Servicios
+En el módulo al que pertenece se lo "registra" en el arreglo "providers".
+Los servicios van a servir como singletons en todo el módulo.
+El servicio no se va a llamar/inyectar hasta que alguien lo requiera.
+
+```javascript
+import { Injectable } from "@angular/core";
+
+@Injectable()
+export class DbzService {
+    constructor() {
+       console.log('Initialized service'); 
+    }
+}
+```
+
+Inyecto el servicio en el módulo
+
+```javascript
+constructor( private dbzService : DbzService ) { }
+```
+
+Por más que inyecte el servicio nuevamente (de la misma manera, inclusive) en otro componente, el servicio se intanciará una sola vez.
+Esto se debe a que se utiliza el patrón de diseño "Prototype".
+Los servicios son un lugar centralizado donde se puede encontrar la información.
